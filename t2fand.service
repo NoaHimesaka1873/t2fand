@@ -1,0 +1,12 @@
+[Unit]
+Description=A simple daemon to control fan speed on Macs with T2 chip 
+
+[Service]
+Type=simple
+Restart=always
+RestartSec=2
+ExecStart=/usr/bin/t2fand
+PIDFile=/run/t2fand.pid
+
+[Install]
+WantedBy=default.target
