@@ -26,7 +26,6 @@ class Fan:
         return int(Path(self.path + "_input").read_text())
 
     def set_speed(self: object, speed: int) -> None:
-        print(speed)
         if speed < self.min_speed:
             speed = self.min_speed
         elif speed > self.max_speed:
@@ -40,9 +39,7 @@ class Fan:
         Path(self.path + "_manual").write_text("0")
 
     def calc_speed(self: object, templist: list, temp: float) -> int:
-        print(templist)
         if templist[3] == "true":
-            print("max")
             return self.max_speed
         if temp <= templist[0]:
             return self.min_speed
@@ -280,7 +277,6 @@ while True:
     else:
         temp = cpuTemp
     for i in range(fanCount):
-        print(temps[i])
         fans[i].set_speed(fans[i].calc_speed(temps[i], temp))
     time.sleep(1)
 
