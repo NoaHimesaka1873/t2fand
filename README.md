@@ -20,4 +20,4 @@ For `speed_curve`, there's three options.
 | logarithmic | Fan speed will be scaled logarithmically. |
 
 Here's an image to better explain this. (Red: linear, blue: exponential, green: logarithmic)
-![Image of fan curve graphs](/Fan Curve.png)
+![Image of fan curve graphs](https://user-images.githubusercontent.com/39993457/233580720-cfdaba12-a2d8-430c-87a2-15209dcfec6d.png)
