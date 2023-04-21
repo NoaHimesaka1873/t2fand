@@ -56,15 +56,14 @@ class Fan:
                 )
             case "exponential":
                 return int(
-                    (temp - templist[0]) ** 2
-                    / (templist[1] - templist[0]) ** 2
+                    (temp - templist[0]) ** 3
+                    / (templist[1] - templist[0]) ** 3
                     * (self.max_speed - self.min_speed)
                     + self.min_speed
                 )
             case "logarithmic":
                 return int(
-                    (temp - templist[0]) ** 0.5
-                    / (templist[1] - templist[0]) ** 0.5
+                    math.log(temp - templist[0], templist[1] - templist[0])
                     * (self.max_speed - self.min_speed)
                     + self.min_speed
                 )
@@ -93,39 +92,6 @@ def get_gpu_temp() -> float:
         if path.read_text().strip() != "0":
             return int(path.read_text()) / 1000
     return -1
-
-
-# calculate fan speed
-def calc_speed(fan: Fan, templist: list, temp: float) -> int:
-    if temp <= templist[0]:
-        return fan.min_speed
-    elif temp >= templist[1]:
-        return fan.max_speed
-    if templist[3] == "true":
-        return fan.max_speed
-    match templist[2]:
-        case "linear":
-            return int(
-                (temp - templist[0])
-                / (templist[1] - templist[0])
-                * (fan.max_speed - fan.min_speed)
-                + fan.min_speed
-            )
-        case "exponential":
-            return int(
-                (temp - templist[0]) ** 2
-                / (templist[1] - templist[0]) ** 2
-                * (fan.max_speed - fan.min_speed)
-                + fan.min_speed
-            )
-        case "logarithmic":
-            return int(
-                math.log(temp - templist[0], templist[1] - templist[0])
-                * (fan.max_speed - fan.min_speed)
-                + fan.min_speed
-            )
-        case _:
-            return fan.max_speed
 
 
 # check if __main__ is the name of the current module and exit if not
