@@ -5,6 +5,7 @@ import os, os.path
 import configparser
 import signal
 import time
+import math
 from glob import glob
 from pathlib import Path
 
@@ -119,8 +120,7 @@ def calc_speed(fan: Fan, templist: list, temp: float) -> int:
             )
         case "logarithmic":
             return int(
-                (temp - templist[0]) ** 0.5
-                / (templist[1] - templist[0]) ** 0.5
+                math.log(temp - templist[0], templist[1] - templist[0])
                 * (fan.max_speed - fan.min_speed)
                 + fan.min_speed
             )
@@ -209,8 +209,8 @@ if not os.path.isfile(CONFIGFILE):
     config = configparser.ConfigParser()
     for i in range(fanCount):
         config["Fan" + str(i + 1)] = {
-            "low_temp": "63",
-            "high_temp": "66",
+            "low_temp": "55",
+            "high_temp": "75",
             "speed_curve": "linear",
             "always_full_speed": "false",
         }
