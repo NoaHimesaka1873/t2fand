@@ -42,7 +42,7 @@ jobs:
       id: create_tag
       run: |
         source PKGBUILD
-        echo "::set-output name=tag::${pkgver}"
+        echo "tag=${pkgver}" >> $GITHUB_OUTPUT
         echo $pkgver $pkgrel
     - name: Release
       if: ${{ !contains(github.event.head_commit.message, '[no rel]') && !contains(github.event.head_commit.message, '[no build]') }}
