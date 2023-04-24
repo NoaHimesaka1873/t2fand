@@ -5,7 +5,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout Repo
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
     - name: Build In Docker
       if: ${{ !contains(github.event.head_commit.message, '[no build]') }}
       run: |
@@ -32,7 +32,7 @@ jobs:
 
     - name: Upload Built Packages
       if: ${{ !contains(github.event.head_commit.message, '[no build]') }}
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: built-packages
         path: ${{ github.workspace }}/*.pkg.tar.*
