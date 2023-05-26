@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 # SPDX-License-Identifier: GPL-3.0
 
 import os, os.path
@@ -6,6 +6,7 @@ import configparser
 import signal
 import time
 import math
+from statistics import mean
 from glob import glob
 from pathlib import Path
 
@@ -191,8 +192,8 @@ except:
     print("Error reading config file")
     exit(1)
 
+fanConfigs = []
 temps = []
-
 # set up config variables
 for i in range(fanCount):
     section_name = f"Fan{i+1}"
@@ -218,7 +219,7 @@ for i in range(fanCount):
     ]:
         print(f"speed_curve in {section_name} section is invalid")
         exit(1)
-    temps.append(
+    fanConfigs.append(
         [
             float(config[section_name]["low_temp"]),
             float(config[section_name]["high_temp"]),
@@ -242,7 +243,11 @@ while True:
             temp = cpuTemp
     else:
         temp = cpuTemp
+    temps.append(temp)
+    if len(temps) > 5:
+        temps.pop(0)
+    meanTemp = round(mean(temps), 2)
     for i in range(fanCount):
-        fans[i].set_speed(fans[i].calc_speed(temps[i], temp))
+        fans[i].set_speed(fans[i].calc_speed(fanConfigs[i], meanTemp))
     time.sleep(1)
 
