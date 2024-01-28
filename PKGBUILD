@@ -1,21 +1,40 @@
-# Maintainer: Noa Himesaka <himesaka@noa.codes>
-pkgname=t2fand
-pkgver=1.2.0
+# Maintainer: Noa Himesaka <himesaka AT noa DOT codes>
+pkgname=t2fanrd
 pkgrel=1
-pkgdesc="A simple daemon to control fan speed on Macs with T2 chip"
+pkgver=r9.68859ca
+pkgdesc="Supercharged T2 fan control daemon, RIIR'd!"
+url="https://github.com/GnomedDev/t2fanrd"
 arch=('x86_64')
 license=('GPL3')
-depends=('linux-t2' 'python')
-makedepends=('git')
-source=("src::git+https://github.com/NoaHimesaka1873/t2fand.git")
-sha256sums=('SKIP')
+makedepends=('git' 'cargo')
+conflicts=('t2fand')
+replaces=('t2fand')
+source=("git+https://github.com/GnomedDev/t2fanrd"
+         t2fanrd.service
+       )
+sha256sums=('SKIP'
+            '47a417f0c532b5538af8237caa81d071e9861b5669676512e3a8a30df192001e')
+
+pkgver() {
+  cd "$pkgname"
+  printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short=7 HEAD)"
+}
+
+prepare() {
+    cd "$pkgname"
+    export RUSTUP_TOOLCHAIN=stable
+    cargo fetch --locked --target "$CARCH-unknown-linux-gnu"
+}
 
 build() {
- echo "No build needed"
+    cd "$pkgname"
+    export RUSTUP_TOOLCHAIN=stable
+    export CARGO_TARGET_DIR=target
+    cargo build --frozen --release --all-features
 }
 
 package() {
-    cd "$srcdir/src"
-    install -Dm700 t2fand "$pkgdir/usr/bin/t2fand"
-    install -Dm644 t2fand.service "$pkgdir/usr/lib/systemd/system/t2fand.service"
+	# Install binary
+	install -Dm755 "$pkgname/target/release/t2fanrd" "$pkgdir/usr/bin/t2fanrd"
+	install -Dm644 t2fanrd.service "$pkgdir/usr/lib/systemd/system/t2fanrd.service"
 }

@@ -17,7 +17,7 @@ jobs:
         groupadd -r $BUILDGROUP
         useradd $BUILDUSER -g $BUILDGROUP -m
         passwd -d $BUILDUSER
-        pacman -Syu --noconfirm --needed sudo base-devel git
+        pacman -Syu --noconfirm --needed sudo base-devel git rust
         printf '$BUILDUSER ALL=(ALL) ALL\\n' | tee -a /etc/sudoers
         chown -R $BUILDUSER:$BUILDGROUP ./
         sudo -u $BUILDUSER gpg --keyserver keyserver.ubuntu.com --recv-keys 38DBBDC86092693E
